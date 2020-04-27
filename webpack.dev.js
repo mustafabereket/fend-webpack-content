@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugIn = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
-const BundleAnalyzerPlugin = new require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     mode: "production",

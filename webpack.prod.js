@@ -2,7 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugIn = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
-
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCSS = require('optimize-css-assets-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
     mode: "production",
@@ -11,6 +14,10 @@ module.exports = {
     output: {
         libraryTarget: 'var',
         library: 'Client'
+    },
+    optimization: {
+        minimize: true,
+        minimizer: [new TerserPlugin({}), new OptimizeCSS({})],
     },
     module: {
         rules: [
@@ -21,7 +28,7 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [ 'style-loader', 'css-loader', 'sass-loader' ]
+                use: [MiniCssExtractPlugin.loader, 'css-loader'],
             }
         ],
     },
@@ -39,6 +46,12 @@ module.exports = {
             cleanStaleWebpackAssets: true,
             protectWebpackAssets: false
         }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: '[name].css'
+        }),
+        new WorkboxPlugin.GenerateSW()
     ]
 
 }
